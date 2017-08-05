@@ -21,13 +21,32 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
 	if (err) throw err;
 	console.log("connected as id " + connection.threadId);
-	queryDatabase();
+	queryProducts(whichItemandHowMany);
 });
 
-function queryDatabase(){
+function queryProducts(callback){
 	connection.query("SELECT * FROM products", function(err, results) {
-    if (err) throw err;
-    console.log(results);
+    	if (err) throw err;
+    	console.log(results);
+    	callback();
 	});
 };
+
+function whichItemandHowMany(){
+	inquirer.prompt([
+		{
+	        name: "item",
+	        message: "Which item would you like to purchase? (Please list Item Number.)",
+        },
+        {
+        	name: "quantity",
+        	message: "How many would you like to purchase?",
+        }
+        ]).then(function(inquirerResponse){
+        	console.log("now what");
+        });
+};
+
+
+
 
