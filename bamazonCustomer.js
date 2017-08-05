@@ -32,6 +32,7 @@ function queryProducts(callback){
 	});
 };
 
+//asking user which item they want and how many
 function whichItemandHowMany(){
 	inquirer.prompt([
 		{
@@ -42,20 +43,36 @@ function whichItemandHowMany(){
         	name: "quantity",
         	message: "How many would you like to purchase?",
         }
+
         ]).then(function(inquirerResponse){
+        	//assigning responses to variables
         	var product = inquirerResponse.product;
         	var quantityRequested = inquirerResponse.quantity;
 
+        	//pulling specific product requested from the DB
         	connection.query("SELECT * FROM products WHERE item_id = ?", [product], function(err, results) {
 		    	if (err) throw err;
+
+		    	//put the quantity and price of the requested item in variables
 		    	var stockQuantity = results[0].stock_quantity;
+		    	var itemPrice = results[0].price;
+
+		    	//determine if there is enough stock to accomodate the order
 		    	if (quantityRequested <= stockQuantity){
-		    		console.log("Your order has been processed!");
+		    		var newQuantity = stockQuantity - quantityRequested;
+		    		var totalPrice = itemPrice * quantityRequested;
+
+		    		connection.query("UPDATE products SET stock_quantity= ? WHERE item_id = ?", [newQuantity, product], function(err, results) {
+		    		if (err) throw err;
+		    		});
+
+	    		console.log("Your order has been processed! Your total is: $" + totalPrice);
 		    	}
 		    	else {
 		    		console.log("Sorry, our inventory is insufficient for your order. Please order a smaller quantity.")
 		    	};
 			});
+
         });
         
 };
