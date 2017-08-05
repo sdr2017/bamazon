@@ -4,8 +4,7 @@ var inquirer = require("inquirer");
 //query the database
 //console.log all the items and their properties
 //inquire the id of the product they want to buy
-	//if the input === one of the product ID's, then 
-	//ask them how many to buy
+//ask them how many to buy
 //if quantity to buy <= quantity in stock, subtract purchased items from database & show price
 	//else console.log "Insufficient Quantity!"
 
@@ -24,6 +23,7 @@ connection.connect(function(err) {
 	queryProducts(whichItemandHowMany);
 });
 
+//grabbing products from the database
 function queryProducts(callback){
 	connection.query("SELECT * FROM products", function(err, results) {
     	if (err) throw err;
@@ -35,7 +35,7 @@ function queryProducts(callback){
 function whichItemandHowMany(){
 	inquirer.prompt([
 		{
-	        name: "item",
+	        name: "product",
 	        message: "Which item would you like to purchase? (Please list Item Number.)",
         },
         {
@@ -43,8 +43,21 @@ function whichItemandHowMany(){
         	message: "How many would you like to purchase?",
         }
         ]).then(function(inquirerResponse){
-        	console.log("now what");
+        	var product = inquirerResponse.product;
+        	var quantityRequested = inquirerResponse.quantity;
+
+        	connection.query("SELECT * FROM products WHERE item_id = ?", [product], function(err, results) {
+		    	if (err) throw err;
+		    	var stockQuantity = results[0].stock_quantity;
+		    	if (quantityRequested <= stockQuantity){
+		    		console.log("Your order has been processed!");
+		    	}
+		    	else {
+		    		console.log("Sorry, our inventory is insufficient for your order. Please order a smaller quantity.")
+		    	};
+			});
         });
+        
 };
 
 
