@@ -10,16 +10,24 @@ var inquirer = require("inquirer");
 	//else console.log "Insufficient Quantity!"
 
 var connection = mysql.createConnection({
-  host: "localhost",
-  port: 3306,
-  user: "root",
-  password: "",
-  database: "bamazon_DB"
+	host: "localhost",
+	port: 3306,
+	user: "root",
+	password: "",
+	database: "bamazon_DB"
 });
 
 //once connected, run what is in the connect function
 connection.connect(function(err) {
-  if (err) throw err;
-  console.log("connected as id " + connection.threadId);
+	if (err) throw err;
+	console.log("connected as id " + connection.threadId);
+	queryDatabase();
+});
+
+function queryDatabase(){
+	connection.query("SELECT * FROM products", function(err, results) {
+    if (err) throw err;
+    console.log(results);
+	});
 };
 
