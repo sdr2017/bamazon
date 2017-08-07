@@ -1,9 +1,11 @@
 # Bamazon Application
 
-![GitHub Logo](/images/logo.png)
-Format: ![Alt Text](url)
 
-Bamazon is a simple commerce application.
+
+Bamazon is a simple commerce application that displays products for sale from a database and invites the user to select a product and make a purchase.
+
+First a database was created using mysql.
+![Make Database](/images/mysql_createDB.png)
 
 It works by listing all available products for sale.
 
