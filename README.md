@@ -29,11 +29,9 @@ If there are enough items in stock to fulfill their order, the user will be noti
 The database will update the stock quantity for that item accordingly.
 
 _Before_
-
 ![Make Database](/images/running_stockOriginal.png)
 
 _After_
-
 ![Make Database](/images/running_stockUpdate.png)
 
 If the user requests to purchase more items than are in stock, they will be notified that there is insufficient stock to complete their purchase, and asked to try again. 
